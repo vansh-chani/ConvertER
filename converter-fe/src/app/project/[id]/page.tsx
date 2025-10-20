@@ -4,6 +4,7 @@ import {
     ReactFlow,
     ReactFlowProvider,
     Background,
+    Controls,
     BackgroundVariant,
     applyNodeChanges,
     applyEdgeChanges,
@@ -16,7 +17,8 @@ import {
     type Connection,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-
+import LeftSidePanel from '@/components/leftSidePanel';
+import RightSidePanel from '@/components/rightSidePanel';
 
 const initialNodes: Node[] = [
     { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' } },
@@ -45,7 +47,7 @@ export default function App() {
     );
 
     return (
-        <div style={{ width: '100vw', height: '100vh', background: '#fff' }}>
+        <div className='w-screen h-screen bg-[#f0f0f0]'>
             <ReactFlowProvider>
                 <ReactFlow
                     nodes={nodes}
@@ -55,9 +57,12 @@ export default function App() {
                     onConnect={onConnect}
                     fitView
                 >
-                    <Background variant={BackgroundVariant.Dots}/>
+                    <Background variant={BackgroundVariant.Dots} gap={16} />
+                    <Controls />
                 </ReactFlow>
             </ReactFlowProvider>
+            <LeftSidePanel />
+            <RightSidePanel />
         </div>
     );
 }
