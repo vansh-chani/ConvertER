@@ -1,0 +1,25 @@
+{
+  "Nodes": [
+    {
+      "id": "n1",
+      "position": { "x": 0, "y": 0 },
+      "data": {
+        "Title": "Student",
+        "Attributes": ["Name", "Age", "Email"]
+      },
+      "type": "strongEntity"
+    },
+    {
+      "id": "n2",
+      "position": { "x": 250, "y": 0 },
+      "data": {
+        "Title": "Course",
+        "Attributes": ["Code", "Title", "Credits"]
+      },
+      "type": "strongEntity"
+    }
+  ],
+  "Edges": [
+    { "id": "n1-n2", "source": "n1", "target": "n2" }
+  ]
+}

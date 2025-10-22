@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-export default function LeftSidePanel() {
-    const [width, setWidth] = useState(300);
+export default function LeftSidePanel({ profileUrl }: { profileUrl: string }) {
+    const [width, setWidth] = useState(320);
     const [dragging, setDragging] = useState(false);
     const rightSideBar = useRef<HTMLDivElement>(null);
 
@@ -12,7 +12,7 @@ export default function LeftSidePanel() {
             if (!dragging) {
                 return;
             }
-            const newWidth = Math.min(Math.max(window.innerWidth - e.clientX, 150), 500);
+            const newWidth = Math.min(Math.max(window.innerWidth - e.clientX, 320), 500);
             setWidth(newWidth);
         }
         function handleMouseUp() {
@@ -38,14 +38,26 @@ export default function LeftSidePanel() {
         <div
             ref={rightSideBar}
             style={{ width }}
-            className='bg-white h-full overflow-hidden absolute top-0 right-0 border-l-[.5px] border-l-[#a1a1a1] shadow-xl'
+            className='bg-white h-full overflow-hidden absolute top-0 right-0 shadow-xl'
         >
             <div className='side-handle h-full cursor-ew-resize w-2 top-0 left-0 absolute'
                 onMouseDown={() => setDragging(true)}
                 onMouseUp={() => setDragging(false)}
             ></div>
-            <h2 className='p-2 border-b text-black select-none'>Right Sidebar</h2>
-            {/* Render your sidebar content here */}
+            <div className='flex flex-row items-center justify-between border-b border-gray-300 pb-6'>
+                <img
+                    src={profileUrl || ''}
+                    className='w-[30px] h-[30px] border-none rounded-full mt-6 ml-6'
+                ></img>
+                <div className='flex flex-row items-center justify-center'>
+                    <button className='mt-6 mr-2 ml-auto text-[#333333] bg-white cursor-pointer font-instrument-sans text-sm font-bold py-2 px-4 rounded-full border border-[#333333] hover:bg-[#33333320]'>
+                        Convert to SQL
+                    </button>
+                    <button className='mt-6 mr-6 ml-auto bg-[#333333] text-white cursor-pointer font-instrument-sans text-sm font-bold py-2 px-4 rounded-full border border-[#333333] hover:opacity-80'>
+                        Save
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

@@ -38,7 +38,7 @@ export default function LeftSidePanel() {
         <div
             ref={leftSideBar}
             style={{ width }}
-            className='bg-white h-full overflow-hidden absolute top-0 left-0 border-r-[.5px] border-r-[#a1a1a1] shadow-xl'
+            className='bg-white h-full overflow-hidden absolute top-0 left-0 shadow-xl'
         >
             <div className='side-handle h-full cursor-ew-resize w-2 top-0 right-0 absolute'
                 onMouseDown={() => setDragging(true)}

@@ -19,13 +19,23 @@ import {
 import '@xyflow/react/dist/style.css';
 import LeftSidePanel from '@/components/leftSidePanel';
 import RightSidePanel from '@/components/rightSidePanel';
+import { StrongEntity } from '@/components/strongEntity';
+import { parseERFileContent } from '../utils';
 
-const initialNodes: Node[] = [
-    { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' } },
-    { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Node 2' } },
-];
 
-const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2' }];
+const profileUrl = 'https://avatars.githubusercontent.com/u/4866536?v=4';
+
+const res = await fetch('http://127.0.0.1:8000/projects/demo');
+const content = await res.text();
+console.log('Fetched ER file content:', content);
+const { nodes, edges } = parseERFileContent(content);
+const initialNodes: Node[] = nodes;
+const initialEdges: Edge[] = edges;
+
+
+const nodeTypes = {
+    strongEntity: StrongEntity,
+};
 
 export default function App() {
     const [nodes, setNodes] = useState<Node[]>(initialNodes);
@@ -55,14 +65,14 @@ export default function App() {
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     onConnect={onConnect}
+                    nodeTypes={nodeTypes}
                     fitView
                 >
                     <Background variant={BackgroundVariant.Dots} gap={16} />
-                    <Controls />
                 </ReactFlow>
             </ReactFlowProvider>
             <LeftSidePanel />
-            <RightSidePanel />
+            <RightSidePanel profileUrl={profileUrl} />
         </div>
     );
 }
