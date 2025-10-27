@@ -3,14 +3,14 @@ import { type NodeProps, type Node, Handle, Position, useReactFlow } from "@xyfl
 import { IoIosAdd } from "react-icons/io";
 import { IoIosClose } from "react-icons/io";
 
-export type StrongEntityNodeData = {
+export type weakEntityNodeData = {
     Title: string;
     Attributes: string[];
 };
 
-export type StrongEntityData = Node<StrongEntityNodeData, 'strongEntity'>;
+export type weakEntityData = Node<weakEntityNodeData, 'weakEntity'>;
 
-export function StrongEntity({ id, data }: NodeProps<StrongEntityData>) {
+export function weakEntity({ id, data }: NodeProps<weakEntityData>) {
     const { setNodes } = useReactFlow();
     const [isInputVisible, setIsInputVisible] = React.useState(false);
     const [newAttribute, setNewAttribute] = React.useState("");
@@ -31,7 +31,7 @@ export function StrongEntity({ id, data }: NodeProps<StrongEntityData>) {
         setNodes((nds) =>
             nds.map((node) => {
                 if (node.id === id) {
-                    const nodeData = node.data as StrongEntityNodeData;
+                    const nodeData = node.data as weakEntityNodeData;
                     return {
                         ...node,
                         data: {
@@ -51,12 +51,17 @@ export function StrongEntity({ id, data }: NodeProps<StrongEntityData>) {
     }
 
     return (
-        <div className="strong-entity-container flex items-center justify-center h-full w-full hover:bg-black/10 hover:shadow-[0_0_0_10px_rgba(161,161,161,.3)] rounded-md">
+        <div
+            className="weak-entity-container flex items-center justify-center h-full w-full 
+             hover:bg-black/10 border-white border-8 
+             shadow-[0_0_0_0.5px_#a1a1a1,0_2px_6px_rgba(0,0,0,0.1)]
+             hover:shadow-[0_0_0_10px_rgba(161,161,161,.3)]
+             rounded-md"
+        >   
             <div
-                className="strong-entity h-full w-full min-w-36 rounded-[6px] bg-white shadow-md"
+                className="weak-entity h-full w-full min-w-36 rounded-[6px] bg-white"
                 style={{
-                    boxShadow: `0 0 0 0.5px #a1a1a1,
-                                0 2px 6px rgba(0,0,0,0.1)`,
+                    boxShadow: `0 0 0 0.5px #a1a1a1`
                 }}
             >
                 <div className="title font-instrument-sans bg-[#515151] h-7 rounded-t-[6px] flex items-center justify-start px-2">
