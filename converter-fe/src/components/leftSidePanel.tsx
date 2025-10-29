@@ -30,6 +30,8 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
     const [RelationsIsExpanded, setRelationsIsExpanded] = useState(true);
     const [ElementsIsExpanded, setElementsIsExpanded] = useState(true);
     const [availableHeight, setAvailableHeight] = useState(0);
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
 
     useEffect(() => {
         const updateHeight = () => {
@@ -98,6 +100,34 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
         }
     };
 
+    function NodeIcon({ type }: { type: string | undefined }) {
+        // No hydration mismatch — deterministic icon mapping
+        const iconMap: Record<string, any> = {
+            strongEntity: strongEntityIcon,
+            strongRelation: strongRelationIcon,
+            weakEntity: weakEntityIcon,
+        };
+
+        const altMap: Record<string, string> = {
+            strongEntity: "Strong Entity Icon",
+            strongRelation: "Strong Relation Icon",
+            weakEntity: "Weak Entity Icon",
+        };
+
+        const icon = iconMap[type || ''];
+        if (!icon) return null;
+
+        return (
+            <Image
+                src={icon}
+                alt={altMap[type || '']}
+                width={16}
+                height={16}
+                className="inline-block mr-2"
+                priority
+            />
+        );
+    }
 
     return (
         <div className='container flex flex-row'>
@@ -170,15 +200,16 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
                         <h1 className='font-instrument-sans font-semibold text-[14px] text-gray-950'>Elements</h1>
                     </div>
                     <div className='Elements-list ml-3 mr-1 mt-2 overflow-y-auto scrollbar-thin'
-                    style={{ maxHeight: availableHeight - 70 }}
+                        style={{ maxHeight: mounted ? availableHeight - 70 : 'auto' }}
                     >
-                        {ElementsIsExpanded && (
+                        {mounted && ElementsIsExpanded && (
                             <>
                                 {nodes.map((node) => (
-                                    <div key={node.id} className='Element-item p-1 pl-2 text-[#686868] font-instrument-sans text-sm rounded-[6px] cursor-pointer hover:bg-gray-100'>
-                                        {node.type === 'strongEntity' && (<Image src={strongEntityIcon} alt="Strong Entity Icon" className='inline-block mr-2' />)}
-                                        {node.type === 'strongRelation' && (<Image src={strongRelationIcon} alt="Strong Relation Icon" className='inline-block mr-2' />)}
-                                        {node.type === 'weakEntity' && (<Image src={weakEntityIcon} alt="Weak Relation Icon" className='inline-block mr-2' />)}
+                                    <div
+                                        key={node.id}
+                                        className='Element-item p-1 pl-2 text-[#686868] font-instrument-sans text-sm rounded-[6px] cursor-pointer hover:bg-gray-100'
+                                    >
+                                        <NodeIcon type={node.type} />
                                         {String((node.data as any)?.Title ?? '')}
                                     </div>
                                 ))}
@@ -187,7 +218,7 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
                     </div>
                 </div>
             </div>
-            <div className="Instructions text-gray-500 z-12 font-jetbrains-mono absolute bottom-3 text-[12px] bg-[#f0f0f015] p-2 rounded-2xl backdrop-blur-[1px]"
+            <div className="Instructions text-gray-500 z-12 font-jetbrains-mono absolute bottom-3 text-[12px] bg-[#f0f0f015] p-2 rounded-2xl backdrop-blur-[1px] select-none"
                 style={{ left: `${width + 20}px` }}>
                 <p className=''><span className='font-bold'>Shift + Mouse</span> to select multiple</p>
                 <p className=''><span className='font-bold'>Backspace</span> to delete</p>

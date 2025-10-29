@@ -18,11 +18,14 @@ import {
 import '@xyflow/react/dist/style.css';
 import { StrongEntity } from '@/components/strongEntity';
 import { weakEntity } from './weakEntity';
+import { StrongRelation } from './strongRelation';
+
 
 
 const nodeTypes = {
     strongEntity: StrongEntity,
     weakEntity: weakEntity,
+    strongRelation: StrongRelation,
 };
 
 interface WorkSpaceProps {
@@ -56,7 +59,7 @@ export default function WorkSpace({
 
     return (
         <div className='w-screen h-screen bg-[#f0f0f0]'>
-            <ReactFlowProvider>
+            
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -68,7 +71,6 @@ export default function WorkSpace({
                 >
                     <Background variant={BackgroundVariant.Dots} gap={16} />
                 </ReactFlow>
-            </ReactFlowProvider>
         </div>
     );
 }

@@ -9,3 +9,12 @@ export function parseERFileContent(content: string) {
         throw new Error('Invalid ER file format');
     }
 }
+
+
+export function writeERFileContent(nodes: any[], edges: any[]) {
+    const content = {
+        Nodes: nodes,
+        Edges: edges,
+    };
+    return JSON.stringify(content, null, 2);
+}

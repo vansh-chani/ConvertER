@@ -22,3 +22,10 @@ async def get_project():
         response = eval(content)
         return JSONResponse(response)
     return JSONResponse({"error": "Not found"}, status_code=404)
+
+@app.post("/project/demo")
+async def create_project(project: dict):
+    file_path = f"demo.er"
+    with open(file_path, "w") as f:
+        f.write(str(project))
+    return JSONResponse({"message": "Project created"}, status_code=201)

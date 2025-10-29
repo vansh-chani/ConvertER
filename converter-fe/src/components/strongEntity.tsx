@@ -1,5 +1,5 @@
 import React from "react";
-import { type NodeProps, type Node, Handle, Position, useReactFlow } from "@xyflow/react";
+import { type NodeProps, type Node, Handle, Position, useReactFlow, useStore } from "@xyflow/react";
 import { IoIosAdd } from "react-icons/io";
 import { IoIosClose } from "react-icons/io";
 
@@ -14,6 +14,11 @@ export function StrongEntity({ id, data }: NodeProps<StrongEntityData>) {
     const { setNodes } = useReactFlow();
     const [isInputVisible, setIsInputVisible] = React.useState(false);
     const [newAttribute, setNewAttribute] = React.useState("");
+    const selectedNodes = useStore((state) =>
+        state.nodes.filter((node) => node.selected)
+    );
+
+    const selectedNode = selectedNodes[0];
 
     function handleCloseInput() {
         setIsInputVisible(false);
@@ -51,12 +56,16 @@ export function StrongEntity({ id, data }: NodeProps<StrongEntityData>) {
     }
 
     return (
-        <div className="strong-entity-container flex items-center justify-center h-full w-full hover:bg-black/10 hover:shadow-[0_0_0_10px_rgba(161,161,161,.3)] rounded-md">
+        <div className="strong-entity-container flex items-center justify-center h-full w-full hover:bg-black/10 hover:shadow-[0_0_0_10px_rgba(161,161,161,.3)] rounded-md"
+            style={selectedNode && id === selectedNode.id
+                ? { boxShadow: '0 0 0 10px rgba(100,100,100,.3)' }
+                : {}}
+        >
             <div
                 className="strong-entity h-full w-full min-w-36 rounded-[6px] bg-white shadow-md"
                 style={{
                     boxShadow: `0 0 0 0.5px #a1a1a1,
-                                0 2px 6px rgba(0,0,0,0.1)`,
+                                    0 2px 6px rgba(0,0,0,0.1)`,
                 }}
             >
                 <div className="title font-instrument-sans bg-[#515151] h-7 rounded-t-[6px] flex items-center justify-start px-2">

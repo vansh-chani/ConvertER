@@ -1,5 +1,5 @@
 import React from "react";
-import { type NodeProps, type Node, Handle, Position, useReactFlow } from "@xyflow/react";
+import { type NodeProps, type Node, Handle, Position, useReactFlow, useStore } from "@xyflow/react";
 import { IoIosAdd } from "react-icons/io";
 import { IoIosClose } from "react-icons/io";
 
@@ -14,6 +14,10 @@ export function weakEntity({ id, data }: NodeProps<weakEntityData>) {
     const { setNodes } = useReactFlow();
     const [isInputVisible, setIsInputVisible] = React.useState(false);
     const [newAttribute, setNewAttribute] = React.useState("");
+    const selectedNodes = useStore((state) =>
+        state.nodes.filter((node) => node.selected)
+    );
+    const selectedNode = selectedNodes[0];
 
     function handleCloseInput() {
         setIsInputVisible(false);
@@ -57,7 +61,10 @@ export function weakEntity({ id, data }: NodeProps<weakEntityData>) {
              shadow-[0_0_0_0.5px_#a1a1a1,0_2px_6px_rgba(0,0,0,0.1)]
              hover:shadow-[0_0_0_10px_rgba(161,161,161,.3)]
              rounded-md"
-        >   
+             style={selectedNode && id === selectedNode.id
+                ? { boxShadow: '0 0 0 10px rgba(100,100,100,.3)' }
+                : {}}
+        >
             <div
                 className="weak-entity h-full w-full min-w-36 rounded-[6px] bg-white"
                 style={{
