@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from app.routes import project, auth
 import os
 
 app = FastAPI()
+app.include_router(project.router, prefix="/project", tags=["Project"])
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 
 app.add_middleware(
     CORSMiddleware,
@@ -13,19 +15,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/projects/demo")
-async def get_project():
-    file_path = f"demo.er"
-    if os.path.exists(file_path):
-        with open(file_path) as f:
-            content = f.read()
-        response = eval(content)
-        return JSONResponse(response)
-    return JSONResponse({"error": "Not found"}, status_code=404)
 
-@app.post("/project/demo")
-async def create_project(project: dict):
-    file_path = f"demo.er"
-    with open(file_path, "w") as f:
-        f.write(str(project))
-    return JSONResponse({"message": "Project created"}, status_code=201)

@@ -9,7 +9,7 @@ import WorkSpace from '@/components/workSpace';
 
 const profileUrl = 'https://avatars.githubusercontent.com/u/4866536?v=4';
 
-const res = await fetch('http://127.0.0.1:8000/projects/demo');
+const res = await fetch('http://127.0.0.1:8000/project/demo');
 const content = await res.text();
 // console.log('Fetched ER file content:', content);
 const { nodes, edges } = parseERFileContent(content);
