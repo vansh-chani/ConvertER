@@ -42,9 +42,10 @@ class ProjectData(BaseModel):
     edges: list[Edge] = Field(default_factory=list)
 
 class Project(BaseModel):
-    Title: str
+    title: str = "Untitled"
     group: str = "Personal"
-    owner_id: str
+    created_by: str
     created_at: datetime
-    last_modified: datetime
-    data: ProjectData
+    last_modified_at: datetime
+    last_modified_by: str
+    data: ProjectData = Field(default_factory=ProjectData)

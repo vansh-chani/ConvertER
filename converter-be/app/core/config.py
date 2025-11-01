@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     MONGO_URL: str
     MONGO_DB_USERS: str
+    MONGO_DB_PROJECTS: str
     
     class Config:
         env_file = ".env"
