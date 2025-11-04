@@ -17,9 +17,10 @@ type LeftPanelProps = {
     projectTitle: string;
     group?: string;
     nodes: Node[];
+    setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
 };
 
-export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelProps & { nodes: Node[] }) {
+export default function LeftSidePanel({ projectTitle, group, nodes, setNodes }: LeftPanelProps) {
     const [width, setWidth] = useState(360);
     const [dragging, setDragging] = useState(false);
     const leftSideBar = useRef<HTMLDivElement>(null);
@@ -129,6 +130,57 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
         );
     }
 
+    const addStrongEntity = () => {
+        const id = crypto.randomUUID();
+
+        const newNode: Node = {
+            id,
+            type: "strongEntity",
+            position: { x: 200, y: 200 },
+            data: {
+                Title: `Entity_${nodes.length + 1}`,
+                Attributes: ["id"]
+            },
+            measured: { width: 144, height: 150 }
+        };
+
+        setNodes(prev => [...prev, newNode]);
+    };
+
+    const addWeakEntity = () => {
+        const id = crypto.randomUUID();
+
+        const newNode: Node = {
+            id,
+            type: "weakEntity",
+            position: { x: 300, y: 200 },
+            data: {
+                Title: `WeakEntity_${nodes.length + 1}`,
+                Attributes: ["id"]
+            },
+            measured: { width: 160, height: 150 }
+        };
+
+        setNodes(prev => [...prev, newNode]);
+    };
+
+    const addStrongRelation = () => {
+        const id = crypto.randomUUID();
+
+        const newNode: Node = {
+            id,
+            type: "strongRelation",
+            position: { x: 300, y: 200 },
+            data: {
+                Title: `Relation_${nodes.length + 1}`,
+                Attributes: ["id"]
+            },
+            measured: { width: 160, height: 150 }
+        };
+
+        setNodes(prev => [...prev, newNode]);
+    };
+
     return (
         <div className='container flex flex-row'>
             <div
@@ -142,7 +194,9 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
                 ></div>
                 <div className='title-section p-6 border-b border-gray-300 select-none'>
                     <div className='flex flex-row items-center justify-between mb-4'>
-                        <button className='Library cursor-pointer'>
+                        <button className='Library cursor-pointer' onClick={
+                            () => window.location.href = "/library"
+                        }>
                             <LuLibraryBig size={16} color='#515151' />
                         </button>
                         <button className='collapse-sidebars cursor-pointer'>
@@ -173,8 +227,12 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
                     <div className='Entities-options'>
                         {EntitiesIsExpanded && (
                             <div className='py-6 flex flex-row flex-wrap gap-4 justify-start items-center '>
-                                <Image src={strongEntityImg} alt="Strong Entity" className='p-2 rounded-[10px] cursor-pointer hover:bg-gray-200' />
-                                <Image src={weakEntityImg} alt="Weak Entity" className='p-2 rounded-[10px] cursor-pointer hover:bg-gray-200' />
+                                <Image src={strongEntityImg} alt="Strong Entity" className='p-2 rounded-[10px] cursor-pointer hover:bg-gray-200'
+                                    onClick={addStrongEntity}
+                                />
+                                <Image src={weakEntityImg} alt="Weak Entity" className='p-2 rounded-[10px] cursor-pointer hover:bg-gray-200'
+                                    onClick={addWeakEntity}
+                                />
                             </div>
                         )}
                     </div>
@@ -188,7 +246,9 @@ export default function LeftSidePanel({ projectTitle, group, nodes }: LeftPanelP
                     <div className='Entities-options ml-3 mr-1'>
                         {RelationsIsExpanded && (
                             <div className='py-6 flex flex-row flex-wrap gap-8 justify-start items-center '>
-                                <Image src={strongRelationImg} alt="Strong Relation" className='p-2 rounded-[10px] cursor-pointer hover:bg-gray-200' />
+                                <Image src={strongRelationImg} alt="Strong Relation" className='p-2 rounded-[10px] cursor-pointer hover:bg-gray-200'
+                                    onClick={addStrongRelation}
+                                />
                                 <Image src={weakRelationImg} alt="Weak Relation" className='p-2 rounded-[10px] cursor-pointer hover:bg-gray-200' />
                             </div>
                         )}

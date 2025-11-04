@@ -32,32 +32,60 @@ def create_library() -> str:
     return str(result.inserted_id)
 
 
+def get_library_by_id(library_id: str) -> Library | None:
+    library_dict = users_db.libraries.find_one({"_id": ObjectId(library_id)})
+    if library_dict:
+        return Library.model_validate(library_dict)
+    return None
+
+
 def update_library(library_id: str, library_data: Library):
     return users_db.libraries.update_one({"_id": library_id}, {"$set": library_data.model_dump()})
 
 
-def create_new_project(created_by: str) -> str:
+def create_new_project(created_by: str):
     project_data = Project(
         created_by=created_by,
         created_at=datetime.utcnow(),
         last_modified_at=datetime.utcnow(),
         last_modified_by=created_by
     )
+
     result = projects_db.projects.insert_one(project_data.model_dump())
-    return str(result.inserted_id)
+    return str(result.inserted_id), project_data
+
 
 
 def create_project_in_library(library_id: str, username: str):
-    project_data = create_new_project(created_by=username)
+    project_id, _ = create_new_project(created_by=username)
 
-    return users_db.libraries.update_one(
+    users_db.libraries.update_one(
         {"_id": ObjectId(library_id)},
-        {"$push": {"projects": project_data}}
+        {"$push": {"projects": project_id}}
     )
 
+    return project_id
 
-# def save_project(library_id: str, project_data: Project):
-#     return users_db.libraries.update_one(
-#         {"_id": library_id, "projects.id": project_data.id},
-#         {"$set": {"projects.$": project_data.model_dump()}}
-#     )
+
+
+def get_project_by_id(project_id: str) -> Project:
+    project_dict = projects_db.projects.find_one({"_id": ObjectId(project_id)})
+    if project_dict:
+        return Project.model_validate(project_dict)
+    return None
+
+def delete_project_by_id(project_id: str):
+    return projects_db.projects.delete_one({"_id": ObjectId(project_id)})
+
+def delete_project_from_library(library_id: str, project_id: str):
+    return users_db.libraries.update_one(
+        {"_id": ObjectId(library_id)},
+        {"$pull": {"projects": project_id}}
+    )
+
+def update_project(project_id: str, project_data: Project):
+    project_data.last_modified_at = datetime.utcnow()
+    return projects_db.projects.update_one(
+        {"_id": ObjectId(project_id)},
+        {"$set": project_data.model_dump()}
+    )
